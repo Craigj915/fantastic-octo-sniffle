@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="index.css" />
+    <script defer src="index.js"></script>
+  </head>
+  <body class="VT323 bg-black text-white">
+    <div class="mx-auto xl:my-20 md:my-10">
+      <div class="flex justify-center">
+        <div class="flex-none">
+          <div
+            id="playerhp"
+            class="relative right-4 top-20 h-[540px] w-20 border-8 border-green-500 rounded-xl flex justify-center"
+          ></div>
+        </div>
+        <div class="container xl:h-[720px] xl:w-[1280px] md:h-[540px] md:w-[960px] sm:h-[360px] sm:w-[640px]">
+
+          <div
+            id="gamearea"
+            class="h-full w-full relative flex justify-center border-8 border-green-500 rounded-xl bg-center bg-contain bg-no-repeat" 
+            style="background-image: url(Assets/background.png)";>         
+          
+          <p id="roomname" class="absolute top-0 left-0 px-16 py-8 text-xl"></p>
+          <!-- <div class="absolute top-0 right-0 px-4 py-4 text-xl">
+            <div id="minimap" class="h-44 w-44 border-8 border-green-500 rounded-xl"></div>
+          </div> -->
+          </div>
+          <div class="relative top-2 right-[4px] flex justify-center">
+            <div class="flex-none">
+              <div id="items" class="w-44">
+                <div id="item1"
+                  class="relative inline-block h-20 w-20 border-8 border-green-500 rounded-xl"
+                ></div>
+                <div id="item2"
+                  class="relative inline-block h-20 w-20 border-8 border-green-500 rounded-xl"
+                ></div>
+                <div id="item3"
+                  class="relative inline-block h-20 w-20 border-8 border-green-500 rounded-xl"
+                ></div>
+                <div id="item4"
+                  class="relative inline-block h-20 w-20 border-8 border-green-500 rounded-xl"
+                ></div>
+              </div>
+            </div>
+
+            <div
+              id="textbox"
+              class="relative h-[360px] w-[900px] border-8 border-green-500 rounded-xl flex justify-center">
+              <p id="textarea" class="absolute mx-4 my-4 text-xl"></p>
+              <input id="usertext" type="text" placeholder="Enter Command" 
+              class="absolute bottom-20 h-10 w-36 my-4 mx-4 py-4 px-4 bg-black flex justify-center text-center"/></br>
+            </div>
+
+            <div class="flex-none">
+              <div
+                id="commands"
+                class="relative left-2 h-40 w-40 border-8 border-green-500 rounded-xl"
+              >
+              <ul class="px-4 text-lg">
+                <li id="command1">one</li>
+                <li id="command2">two</li>
+                <li id="command3">three</li>
+                <li id="command4">four</li>
+                <li id="command5">five</li>
+              </ul>
+                <!-- <div class=""></div>
+                <div class=""></div>
+                <div class=""></div>
+                <div class=""></div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-none">
+          <div
+            id="npchp"
+            class="relative left-4 top-20 h-[540px] w-20 border-8 border-green-500 rounded-md"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

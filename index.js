@@ -1,99 +1,4 @@
-/* 
-class Characters {
-  constructor(name, greeting, level, job) {
-    this.name = name;
-    this.greeting = greeting;
-    this.level = level;
-    this.job = job;
-    this.spawn = spawn;
-    this.stats = stats;
-    this.weapon = weapon;
-  }
-}
-
-class Enemy extends Characters {
-  constructor(name, greeting, weapon, level, stats, job, spawn) {
-    super(name, greeting, level, job, stats, spawn);
-    
-  }
-}
-
-class NPC extends Characters {
-  constructor(name, greeting, conversation, level, stats, job, spawn) {
-    super(name, greeting, level, job, stats, spawn);
-    this.conversation = conversation;
-  }
-} 
-character creator
-https://www.avatarsinpixels.com/minipix/clothing/Body
-Class {rouge, wizard, warlok, druid, paladin, dark knight, barbarian, tamer, ranger, monk, fighter}
-Race {
-    dwarf,
-    elf,
-    dark elf,
-    human,
-    orc,
-    fairy,
-    undead,
-    pixie,
-    tiefling,
-    goblin,
-    demon,
-    beastfolk,
-}  
-
-Weapon {
-    sword {Greatsword, Longsword, Shortsword, Rapier}
-    bludgeon {Club, Flail, Morningstar, Mace, War Hammer, Maul}
-    axe {Greataxe, Battle Axe, Light Pick, Pickaxe, Handaxe}
-    spear {Spear, Short Spear, Lance, Fork, Trident}
-    polearm {Glaive, Halberd, Bill, Naginata, Ranseur}
-    knife {Dagger, Karambit, Gut Knife, Knuckle Axe, Kukri, Sickle, Sai, Push Dagger}
-    range {Long Bow, Short Bow, Crossbow, Sling, Throwing Axe, Throwing Knife}
-    fist {Cestus, Spiked Gauntlet, Iron Claw}
-}
-
-Armour {
-    head {
-        plate helmet :
-        chain coif :
-        hood :
-    }
-    chest {
-        breastplate :
-        hauberk :
-        scale :
-        chain :
-    }
-    hands {
-        gauntlet :
-        chain gloves :
-        iron vambrace :
-    }
-    legs {
-        plate greaves :
-        chain leggings :
-        iron greaves :
-    }
-    feet {
-        sabatons :
-        chain boots :
-        leather boots :
-    }
-}
-
-spells {
-    counjuration : "creating objects"
-    enchantment : "enchanting objects"
-    illusion : "distorting senses"
-    necromancy : "raising dead"
-    malediction : "evil incantations"
-    hemomancy : "blood magic"
-}
-
-*/
-
-class door {
+class doors {
   constructor(name, locked, description) {
     this._name = name;
     this._locked = locked;
@@ -114,15 +19,19 @@ class Room {
     this._description = description;
     this._linkedRooms = {};
     this._character = [];
-    this._door= [];
+    this._doors = [];
   }
 
-  set door(value) {
-    this._door.push(value);
+  set doors(value) {
+    this._doors.push(value);
   }
 
-  get door() {
-    return this._door;
+  set doorsArr(value) {
+    this._doors = value;
+  }
+
+  get doors() {
+    return this._doors;
   }
 
   set character(value) {
@@ -158,21 +67,20 @@ class Room {
   }
 
   describe() {
-    return (
-      this._description
-    );
+    return this._description;
   }
 
-  linkRoom(action, roomToLink) {
-    this._linkedRooms[action] = roomToLink;
+  linkRoom(doors, command, roomToLink) {
+    this._linkedRooms[doors] = {command, roomToLink};console.log(this._linkedRooms);
   }
 
-  move(action) {
-    if(action in this._linkedRooms) {
-        return this._linkedRooms[action];
+  move(command, door) {
+    // for ()
+    if (door in this._linkedRooms) {
+      return this._linkedRooms[door];
     } else {
-        alert("This action is invalid")
-        return this;
+      alert("This door is SHIT");
+      return this;
     }
   }
 }
@@ -230,24 +138,29 @@ class Character {
   }
 
   talk() {
-    return this._name + " says " + "'" + this._conversation + "'" + this._name+ " is a "+ this._description;
+    return (
+      this._name +
+      " says " +
+      "'" +
+      this._conversation +
+      "'" +
+      this._name +
+      " is a " +
+      this._description
+    );
   }
 }
 
 let currentRoom;
 
 const startRoom = new Room("Start Room", "You wake up in a dark room with...");
-const hallwayOne = new Room("hallwayOne", "a dark long hallway");
-const roomOne = new Room("roomOne", "one one one");
-const roomTwo = new Room("roomTwo", "two two two");
-const roomThree = new Room("roomThree", "three three three");
-const hallwayTwo = new Room("hallwayTwo", "h two h two h two");
-const roomFour = new Room("roomFour", "four four four");
+const hallwayOne = new Room("hallwayOne", "a dark long hallway with 3 doors");
+const roomOne = new Room("roomOne", "A large room with 2 doors");
+const roomTwo = new Room("roomTwo", "A small cell");
+const roomThree = new Room("roomThree", "A large room full of boxes");
+const hallwayTwo = new Room("hallwayTwo", "A short corridor with 2 doors");
+const roomFour = new Room("roomFour", "A large room with 3 doors");
 
-startRoom.linkRoom("open", hallwayOne);
-hallwayOne.linkRoom("open", startRoom);
-hallwayOne.linkRoom("open", roomOne);
-roomOne.linkRoom("open", hallwayOne);
 // hallwayOne.linkRoom("east", roomThree);
 
 // roomTwo.linkRoom("north", hallwayOne);
@@ -258,98 +171,342 @@ roomOne.linkRoom("open", hallwayOne);
 
 // hallwayTwo.linkRoom("west", roomFour);
 
-console.log()
-
-if(door.locked = false) {
+if ((doors.locked = false)) {
   lockedDoor = " A locked";
 } else {
   lockedDoor = " An unlocked";
 }
 
-const Door1 = new door("Door1", false,  `${ lockedDoor} wooden door leading too a long dark hallway`);
-startRoom.door = Door1;
-hallwayOne.door = Door1;
+const doorStart = new doors(
+  "doorStart",
+  false,
+  ` ${lockedDoor} wooden doors leading too a long dark hallway`
+);
+const door1 = new doors(
+  "door1",
+  false,
+  ` ${lockedDoor} cell doors leading too a small room`
+);
+const door2 = new doors(
+  "door2",
+  false,
+  ` ${lockedDoor} cell doors leading too a small room`
+);
+const door3 = new doors(
+  "door3",
+  false,
+  ` ${lockedDoor} door 3`
+);
+const door4 = new doors(
+  "door4",
+  false,
+  ` ${lockedDoor} door 4`
+);
 
-const Door2= new door("Door2", true, `${ lockedDoor} cell door leading too a small room`);
-roomOne.door = Door2;
-hallwayOne.door = Door2;
+const door5 = new doors(
+  "door5",
+  false,
+  ` ${lockedDoor} door 5`
+);
 
-// const Door3 = new door(false, "A cell door leading too a small room");
-// const Door4 = new door();
-// const Door5 = new door("Door2", true, `${ lockedDoor} cell door leading too a small room`);
-// const Door6 = new door();
-// const Door7 = new door();
-// const Door8 = new door();
-// const Door9 = new door();
-// const Door10 = new door();
-// const Door11 = new door();
-// const Door12 = new door();
-// const Door13 = new door();
-// const Door14 = new door();
+startRoom.doorsArr = [doorStart, door1, door4];
+roomOne.doors = door1;
+roomOne.doors = door4;
+roomTwo.doors = door2;
+roomThree.doors = door3;
+hallwayOne.doors = doorStart; 
+hallwayOne.doors = door1;
+hallwayOne.doors = door2;
+hallwayOne.doors = door3;
+hallwayTwo.doors = door4;
+hallwayTwo.doors = door5;
+// const doors4 = new Door();
+// const doors5 = new Door("doors2", true, `${ lockeddoors} cell doors leading too a small room`);
+// const doors6 = new Door();
+// const doors7 = new Door();
+// const doors8 = new Door();
+// const doors9 = new Door();
+// const doors10 = new Door();
+// const doors11 = new Door();
+// const doors12 = new Door();
+// const doors13 = new Door();
+// const doors14 = new Door();
 
+startRoom.linkRoom(doorStart, "open", hallwayOne);
+hallwayOne.linkRoom(doorStart, "open", startRoom);
+hallwayOne.linkRoom(door1, "open", roomOne);
+roomOne.linkRoom(door1, "open", hallwayOne);
 
 const Dave = new Character("Dave", "Tiefling", "hello there");
 const Bill = new Character("Bill", "fdjusf", "Sup ehrieou");
 startRoom.character = Dave;
 startRoom.character = Bill;
 
-
-
-
-
 const displayRoomInfo = (room) => {
   let occupantMsg = "";
   let doorsInRoom = "";
-
   if (room?.character == []) {
     //Somestuff
     occupantMsg = "There is nobody in this room";
-  } else { console.log(room.character);
+  } else {
     //someotherstuff
     for (index in room.character) {
-      console.log(room.character[index]);
-    console.log(room);
-    occupantMsg += `${room.character[index].talk()}</br>`;
+      occupantMsg += `${room.character[index].talk()}</br>`;
     }
   }
-  
-  for (index in room.door) {
-    console.log(room.door[index]);
-  console.log(room);
-  doorsInRoom += `${room.door[index].description}</br>`;
+
+  for (index in room.doors) {
+    doorsInRoom += `${room.doors[index].description}</br>`; console.log(room.doors[index])
   }
 
+  let textContent =
+    "<p>" +
+    room?.describe() +
+    doorsInRoom +
+    "</p>" +
+    "<p>" +
+    occupantMsg +
+    "</p>";
 
-  let textContent = "<p>" + room?.describe() + doorsInRoom + "</p>" + "<p>" + occupantMsg + "</p>";
-
-  document.getElementById("roomname").innerHTML = room?.name
+  document.getElementById("roomname").innerHTML = room?.name;
   document.getElementById("textarea").innerHTML = textContent;
-  document.getElementById("usertext").value = "";
-  document.getElementById("usertext").focus();
+  document.getElementById("userinput").value = "";
+  document.getElementById("userinput").focus();
 };
 
+let weaponsShining = [
+  "Shining Greatsword",
+  "Shining Longsword",
+  "Shining Shortsword",
+  "Shining Rapier",
+  "Shining Club",
+  "Shining Flail",
+  "Shining Morningstar",
+  "Shining Mace",
+  "Shining War Hammer",
+  "Shining Maul",
+  "Shining Greataxe",
+  "Shining Battle Axe",
+  "Shining Light Pick",
+  "Shining Pickaxe",
+  "Shining Handaxe",
+  "Shining Spear",
+  "Shining Short Spear",
+  "Shining Lance",
+  "Shining Fork",
+  "Shining Trident",
+  "Shining Glaive",
+  "Shining Halberd",
+  "Shining Bill",
+  "Shining Naginata",
+  "Shining Ranseur",
+  "Shining Dagger",
+  "Shining Karambit",
+  "Shining Gut Knife",
+  "Shining Knuckle Axe",
+  "Shining Kukri",
+  "Shining Sickle",
+  "Shining Sai",
+  "Shining Push Dagger",
+  "Shining Long Bow",
+  "Shining Short Bow",
+  "Shining Crossbow",
+  "Shining Sling",
+  "Shining Throwing Axe",
+  "Shining Throwing Knife",
+  "Shining Cestus",
+  "Shining Spiked Gauntlet",
+  "Shining Iron Claw",
+];
 
+let weaponsSturdy = [
+  "Sturdy Greatsword",
+  "Sturdy Longsword",
+  "Sturdy Shortsword",
+  "Sturdy Rapier",
+  "Sturdy Club",
+  "Sturdy Flail",
+  "Sturdy Morningstar",
+  "Sturdy Mace",
+  "Sturdy War Hammer",
+  "Sturdy Maul",
+  "Sturdy Greataxe",
+  "Sturdy Battle Axe",
+  "Sturdy Light Pick",
+  "Sturdy Pickaxe",
+  "Sturdy Handaxe",
+  "Sturdy Spear",
+  "Sturdy Short Spear",
+  "Sturdy Lance",
+  "Sturdy Fork",
+  "Sturdy Trident",
+  "Sturdy Glaive",
+  "Sturdy Halberd",
+  "Sturdy Bill",
+  "Sturdy Naginata",
+  "Sturdy Ranseur",
+  "Sturdy Dagger",
+  "Sturdy Karambit",
+  "Sturdy Gut Knife",
+  "Sturdy Knuckle Axe",
+  "Sturdy Kukri",
+  "Sturdy Sickle",
+  "Sturdy Sai",
+  "Sturdy Push Dagger",
+  "Sturdy Long Bow",
+  "Sturdy Short Bow",
+  "Sturdy Crossbow",
+  "Sturdy Sling",
+  "Sturdy Throwing Axe",
+  "Sturdy Throwing Knife",
+  "Sturdy Cestus",
+  "Sturdy Spiked Gauntlet",
+  "Sturdy Iron Claw",
+];
+
+let weaponsShattered = [
+  "Shattered Greatsword",
+  "Shattered Longsword",
+  "Shattered Shortsword",
+  "Shattered Rapier",
+  "Shattered Club",
+  "Shattered Flail",
+  "Shattered Morningstar",
+  "Shattered Mace",
+  "Shattered War Hammer",
+  "Shattered Maul",
+  "Shattered Greataxe",
+  "Shattered Battle Axe",
+  "Shattered Light Pick",
+  "Shattered Pickaxe",
+  "Shattered Handaxe",
+  "Shattered Spear",
+  "Shattered Short Spear",
+  "Shattered Lance",
+  "Shattered Fork",
+  "Shattered Trident",
+  "Shattered Glaive",
+  "Shattered Halberd",
+  "Shattered Bill",
+  "Shattered Naginata",
+  "Shattered Ranseur",
+  "Shattered Dagger",
+  "Shattered Karambit",
+  "Shattered Gut Knife",
+  "Shattered Knuckle Axe",
+  "Shattered Kukri",
+  "Shattered Sickle",
+  "Shattered Sai",
+  "Shattered Push Dagger",
+  "Shattered Long Bow",
+  "Shattered Short Bow",
+  "Shattered Crossbow",
+  "Shattered Sling",
+  "Shattered Throwing Axe",
+  "Shattered Throwing Knife",
+  "Shattered Cestus",
+  "Shattered Spiked Gauntlet",
+  "Shattered Iron Claw",
+];
+
+let weapon;
+let potion = ["health potion", "useless potion", "mystery potion"];
+let money = [
+  "1 Gold",
+  "2 Gold",
+  "2 Gold",
+  "2 Gold",
+  "1 Gold",
+  "5 Gold",
+  "1 Gold",
+  "1 Gold",
+  "1 Gold",
+  "1 Gold",
+];
+let key = ["Rusty key", "Rusty key"];
+
+weaponGenerator = () => {
+  let wepGen = Math.random();
+  if (wepGen < 0.1) {
+    weapon = weaponsShining[Math.floor(Math.random() * weaponsShining.length)];
+  } else if (wepGen < 0.4) {
+    weapon = weaponsSturdy[Math.floor(Math.random() * weaponsSturdy.length)];
+  } else {
+    weapon =
+      weaponsShattered[Math.floor(Math.random() * weaponsShattered.length)];
+  }
+};
+let loot;
+lootGenerator = () => {
+  let lootGen = Math.random();
+  if (lootGen < 0.1) {
+    let key = Math.random();
+    if (key < 0.3) {
+      loot = "Special key";
+    } else {
+      loot = "Rusty key";
+    }
+  } else if (lootGen < 0.4) {
+    let potion = Math.random();
+    if (potion < 0.2) {
+      loot = "Mystery potion";
+    } else if (potion < 0.6) {
+      loot = "Health potion";
+    } else {
+      loot = "Useless potion";
+    }
+  } else {
+    money = Math.random();
+    if (money < 0.2) {
+      loot = "5 Gold";
+    } else {
+      loot = "1 Gold";
+    }
+  }
+};
 
 const startGame = () => {
   currentRoom = startRoom;
-  displayRoomInfo(currentRoom)
-console.log(currentRoom.door)
-  document.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-          //navigation
-          const command = document.getElementById("usertext").value.toLowerCase();
-          const action = ["open"];
-          
-          if (command.includes(action + currentRoom.door)) {
-              currentRoom = currentRoom.move(action);
-              displayRoomInfo(currentRoom);
-          } else {
-              document.getElementById("usertext").value = "";
-              alert("That is not a valid command")
-              return;
-          }
+  weaponGenerator();
+  lootGenerator();
+  // console.log(weapon);
+  // console.log(loot);
+  displayRoomInfo(currentRoom);
+
+  currentRoomDoors = [];
+  
+  for (index in currentRoom.doors) {
+    currentRoomDoors.push(currentRoom.doors[index]._name);
+}
+console.log(currentRoomDoors);
+
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    // Navigation
+    let commandArray = document.getElementById("userinput").value.split(" ");
+    let commandAction = commandArray[0];
+    let commands = ["open", "use", "fight"];
+    let args = commandArray[1];
+    // console.log
+    
+    if (commandAction === commands[0] && args) {
+      // let matchingDoor = currentRoom.doors.find(doors => doors._name === args);
+      let matchingDoor = currentRoomDoors.find(doors => doors === args);console.log(2134213212);
+      let doorToBeOpened = currentRoom.doors.find(doors => doors._name === args); console.log(doorToBeOpened);
+      if (matchingDoor) {
+        
+        // console.log(matchingDoor.name);
+        currentRoom = currentRoom.move(commandAction, doorToBeOpened);
+        displayRoomInfo(currentRoom);
+      } else {
+        alert("There is no door with that name");
       }
-  })
+    } else {
+      alert("Invalid command");
+    }
+  }
+});
 }
 
-startGame();
+startGame()

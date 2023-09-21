@@ -173,12 +173,12 @@ let playerGold;
 let playerPotion;
 let playerKey;
 // username, health, weapon, gold, potions, key
-const player = new Player(
-  `username`, `icon`, 100, `playerWeapon`, `playerGold`, `playerPotion`, `playerKey`);
+const player = new Player(username, icon, 100, playerWeapon, 0, playerPotion, playerKey
+);
 
 playerHealth = () => {
   health = player._health;
-  console.log(health);
+ 
   if (health == 0) {
     document.getElementById("playerdied").classList.remove("hidden");
     document.getElementById("playerdiedvid").play();
@@ -302,12 +302,12 @@ const displayRoomInfo = (room) => {
 
   if (weapon !== undefined && weapon !== "") {
     weaponInRoom += `lay in the dusty you can see a ${weapon}</br>`;
-    console.log(weaponInRoom);
+
   }
 
   if (loot !== undefined && loot !== "") {
     itemInRoom += `${loot} You see a glimmer in the corner of your eye</br>`;
-    console.log(itemInRoom);
+  
   }
 
   let textContent =
@@ -468,9 +468,9 @@ weaponGenerator = () => {
   let wepGen = Math.random();
   let weapon;
 
-  if (wepGen < 0.1) {
+  if (wepGen < 0.2) {
     weapon = weaponsShining[Math.floor(Math.random() * weaponsShining.length)];
-  } else if (wepGen < 0.4) {
+  } else if (wepGen < 0.6) {
     weapon = weaponsSturdy[Math.floor(Math.random() * weaponsSturdy.length)];
   } else {
     weapon =
@@ -503,9 +503,11 @@ lootGenerator = () => {
   } else {
     money = Math.random();
     if (money < 0.2) {
-      loot = "5 Gold";
+      n = Math.floor(Math.random() * 25);
+      loot = `${n} Gold`;
     } else {
-      loot = "1 Gold";
+      n = Math.floor(Math.random() * 10);
+      loot = `${n} Gold`;
     }
   }
 
@@ -517,25 +519,40 @@ const startGame = () => {
   // this is the starting room.
   currentRoom = startRoom;
   image = currentRoom._background;
-  console.log(image);
+
   document.getElementById("gamearea").style.backgroundImage = `url(${image})`;
   if (currentRoom === startRoom) {
     weapon = weaponGenerator();
+    player._weapon = weapon;
+    document.getElementById("item1").innerHTML = `${weapon}`;
     let n = Math.random();
-    if (n < 0.2) {
+    if (n < 1) {
       loot = lootGenerator();
+      if (loot.includes("key")) {
+        player._key = loot;
+        document.getElementById("item2").innerHTML = `${loot}`;
+      } else if (loot.includes("potion")) {
+        player._potions = loot;
+        document.getElementById("item3").innerHTML = `${loot}`;
+      } else {
+        player._gold += parseInt(loot.split(" ")[0], 10);
+
+        document.getElementById("item4").innerHTML = `${player._gold}`;
+      }
     } else if (n < 0.4) {
       weapon = weaponGenerator();
+      player._weapon = weapon;
     }
-
+  
     displayRoomInfo(currentRoom);
   }
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-      const command = document.getElementById("userinput").value.toLowerCase();
+      const commandRaw = document.getElementById("userinput").value.toLowerCase();
+      const command = commandRaw.split(" ")[0];
       const directions = ["left", "right", "up", "down"];
-      let args = command[1];
+      let args = commandRaw.split(" ")[1];
 
       if (directions.includes(command)) {
         currentRoom = currentRoom.move(command);
@@ -549,28 +566,34 @@ const startGame = () => {
         }
         displayRoomInfo(currentRoom);
         image = currentRoom._background;
-        console.log(image);
+
         document.getElementById(
           "gamearea"
         ).style.backgroundImage = `url(${image})`;
       } else {
-        document.getElementById("userinput").value = "";
-        alert("That is not a valid command.");
-        return;
-      }
+        if (loot || weapon) {
+          const commandActions = ["take"];
+          if (commandActions.includes(command)) {
+            //add loot or weapon too player inventory
+            if (args == "weapon") {
+              console.log(weapon);
+              player._weapon = weapon;
+              document.getElementById("item1").innerHTML = `${weapon}`;
+            } else if (args == "loot") {
+              if (loot.includes("key")) {
+                player._key = loot;
+                document.getElementById("item2").innerHTML = `${loot}`;
+              } else if (loot.includes("potion")) {
+                player._potions = loot;
+                document.getElementById("item3").innerHTML = `${loot}`;
+              } else {
+                player._gold += parseInt(loot.split(" ")[0], 10);
 
-      if (loot || weapon) {
-        const commandActions = ["search", "take"];
-        if (commandActions.includes(command)) {
-          //add loot or weapon too player inventory
-          if (args == "weapon") {
-            playerWeapon = weapon.action(command);
-            document.getElementById("item1").innerHTML = `${weapon}`;
-          } else {
-            playerLoot = loot.action(command);
-            document.getElementById("item2").innerHTML = `${loot}`;
+                document.getElementById("item4").innerHTML = `${player._gold}`;
+              }
+            }
+            document.getElementById("userinput").value = "";
           }
-          document.getElementById("userinput").value = "";
         }
       }
     }

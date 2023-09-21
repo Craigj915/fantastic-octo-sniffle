@@ -25,15 +25,25 @@
 
           <div
             id="gamearea"
-            class="h-full w-full relative flex justify-center border-8 border-green-500 rounded-xl bg-center bg-contain bg-no-repeat" 
+            class="h-full w-full relative flex justify-center border-8 border-green-500 rounded-xl bg-center bg-contain bg-no-repeat " 
             >         
-            <div id="playerdied" class="hidden">
-              <video id="playerdiedvid" class="items-center h-full">
+            <div id="playerdied" class="hidden z-50">
+              <video id="playerdiedvid" class="items-center h-full ">
                 <source src="Assets/youdied.mp4" type="video/mp4">
               </video>
             </div>
             <div id="playerIcon" class="absolute bottom-28 left-10 h-32 w-32">
               <img src="Assets/GoblinFemale.png"/>
+            </div>
+
+            <div id="enemy3" class="absolute bottom-28 right-20 h-40 w-40 z-20">
+              <img src="Assets/GoblinMale.png"/>
+            </div>
+            <div id="enemy2" class="absolute bottom-40 right-28 h-44 w-44">
+              <img src="Assets/VampireMale.png"/>
+            </div>            
+            <div id="enemy1" class="absolute bottom-28 right-64 h-48 w-48">
+              <img src="Assets/VampireFemale.png"/>
             </div>
           <p id="roomname" class="absolute top-0 left-0 px-16 py-8 text-xl"></p>
           <!-- <div class="absolute top-0 right-0 px-4 py-4 text-xl">
@@ -42,7 +52,7 @@
           </div>
           <div class="relative top-2 right-[4px] flex justify-center">
             <div class="flex-none">
-              <div id="items" class="w-44">
+              <div id="items" class="w-44 text-white">
                 <div id="item1"
                   class="relative inline-block h-20 w-20 border-8 border-green-500 rounded-xl"
                 ></div>

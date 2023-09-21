@@ -1,37 +1,48 @@
-class doors {
-  constructor(name, locked, description) {
-    this._name = name;
-    this._locked = locked;
-    this._description = description;
-  }
-  get description() {
-    return this._description;
+class Player {
+  constructor(username, icon, health, weapon, gold, potions, key) {
+    this._username = username;
+    this._icon = icon;
+    this._health = health;
+    this._weapon = weapon;
+    this._gold = gold;
+    this._potions = potions;
+    this._key = key;
   }
 
-  get locked() {
-    return this._locked;
+  get username() {
+    return this._username;
+  }
+
+  get health() {
+    return this._health;
+  }
+
+  get weapon() {
+    return this._weapon;
+  }
+
+  get gold() {
+    return this._gold;
+  }
+
+  get potions() {
+    return this._potions;
+  }
+
+  get key() {
+    return this._key;
   }
 }
 
 class Room {
-  constructor(name, description) {
+  constructor(name, description, background) {
     this._name = name;
     this._description = description;
+    this._background = background;
     this._linkedRooms = {};
     this._character = [];
-    this._doors = [];
-  }
-
-  set doors(value) {
-    this._doors.push(value);
-  }
-
-  set doorsArr(value) {
-    this._doors = value;
-  }
-
-  get doors() {
-    return this._doors;
+    // this._loot = [];
+    // this._weapon = [];
   }
 
   set character(value) {
@@ -48,6 +59,10 @@ class Room {
 
   get description() {
     return this._description;
+  }
+
+  get background() {
+    return this._background;
   }
 
   set name(value) {
@@ -70,16 +85,15 @@ class Room {
     return this._description;
   }
 
-  linkRoom(doors, command, roomToLink) {
-    this._linkedRooms[doors] = {command, roomToLink};console.log(this._linkedRooms);
+  linkRoom(direction, roomToLink) {
+    this._linkedRooms[direction] = roomToLink;
   }
 
-  move(command, door) {
-    // for ()
-    if (door in this._linkedRooms) {
-      return this._linkedRooms[door];
+  move(direction) {
+    if (direction in this._linkedRooms) {
+      return this._linkedRooms[direction];
     } else {
-      alert("This door is SHIT");
+      alert("That way is blocked.");
       return this;
     }
   }
@@ -151,91 +165,121 @@ class Character {
   }
 }
 
+let username;
+let icon;
+let health;
+let playerWeapon;
+let playerGold;
+let playerPotion;
+let playerKey;
+// username, health, weapon, gold, potions, key
+const player = new Player(
+  `username`, `icon`, 100, `playerWeapon`, `playerGold`, `playerPotion`, `playerKey`);
+
+playerHealth = () => {
+  health = player._health;
+  console.log(health);
+  if (health == 0) {
+    document.getElementById("playerdied").classList.remove("hidden");
+    document.getElementById("playerdiedvid").play();
+  }
+  document.getElementById("playerhp").classList.add(`h-[${health}%]`);
+};
+
 let currentRoom;
 
-const startRoom = new Room("Start Room", "You wake up in a dark room with...");
-const hallwayOne = new Room("hallwayOne", "a dark long hallway with 3 doors");
-const roomOne = new Room("roomOne", "A large room with 2 doors");
-const roomTwo = new Room("roomTwo", "A small cell");
-const roomThree = new Room("roomThree", "A large room full of boxes");
-const hallwayTwo = new Room("hallwayTwo", "A short corridor with 2 doors");
-const roomFour = new Room("roomFour", "A large room with 3 doors");
-
-// hallwayOne.linkRoom("east", roomThree);
-
-// roomTwo.linkRoom("north", hallwayOne);
-
-// roomThree.linkRoom("west", hallwayOne);
-
-// roomOne.linkRoom("east", hallwayTwo);
-
-// hallwayTwo.linkRoom("west", roomFour);
-
-if ((doors.locked = false)) {
-  lockedDoor = " A locked";
-} else {
-  lockedDoor = " An unlocked";
-}
-
-const doorStart = new doors(
-  "doorStart",
-  false,
-  ` ${lockedDoor} wooden doors leading too a long dark hallway`
+const startRoom = new Room(
+  "Start Room",
+  "You wake up in a dark room with...",
+  "Assets/StartRoomBackground.png"
 );
-const door1 = new doors(
-  "door1",
-  false,
-  ` ${lockedDoor} cell doors leading too a small room`
+const roomOne = new Room("roomOne", "A large room with 2 doors", "Assets/.png");
+const roomTwo = new Room("roomTwo", "A small cell", "Assets/.png");
+const roomThree = new Room(
+  "roomThree",
+  "A large room full of boxes",
+  "Assets/.png"
 );
-const door2 = new doors(
-  "door2",
-  false,
-  ` ${lockedDoor} cell doors leading too a small room`
+const roomFour = new Room(
+  "roomFour",
+  "A large room with 3 doors",
+  "Assets/.png"
 );
-const door3 = new doors(
-  "door3",
-  false,
-  ` ${lockedDoor} door 3`
+const roomFive = new Room(
+  "roomFive",
+  "A large room with 3 doors",
+  "Assets/.png"
 );
-const door4 = new doors(
-  "door4",
-  false,
-  ` ${lockedDoor} door 4`
+const roomSix = new Room("roomSix", "A large room with 3 doors", "Assets/.png");
+const roomSeven = new Room(
+  "roomSeven",
+  "A large room with 3 doors",
+  "Assets/.png"
+);
+const roomShop = new Room(
+  "roomShop",
+  "A large room with 3 doors",
+  "Assets/.png"
+);
+const bossRoom = new Room(
+  "BOSS ROOM",
+  "A large room with 3 doors",
+  "Assets/.png"
 );
 
-const door5 = new doors(
-  "door5",
-  false,
-  ` ${lockedDoor} door 5`
+const hallwayOne = new Room(
+  "hallwayOne",
+  "a dark long hallway with 3 doors",
+  "Assets/HallOneBackground.png"
+);
+const hallwayTwo = new Room(
+  "hallwayTwo",
+  "A short corridor with 2 doors",
+  "Assets/.png"
+);
+const hallwayThree = new Room(
+  "hallwayThree",
+  "A short corridor with 2 doors",
+  "Assets/.png"
+);
+const hallwayBoss = new Room(
+  "Boss Corridor",
+  "A short corridor with 2 doors",
+  "Assets/.png"
 );
 
-startRoom.doorsArr = [doorStart, door1, door4];
-roomOne.doors = door1;
-roomOne.doors = door4;
-roomTwo.doors = door2;
-roomThree.doors = door3;
-hallwayOne.doors = doorStart; 
-hallwayOne.doors = door1;
-hallwayOne.doors = door2;
-hallwayOne.doors = door3;
-hallwayTwo.doors = door4;
-hallwayTwo.doors = door5;
-// const doors4 = new Door();
-// const doors5 = new Door("doors2", true, `${ lockeddoors} cell doors leading too a small room`);
-// const doors6 = new Door();
-// const doors7 = new Door();
-// const doors8 = new Door();
-// const doors9 = new Door();
-// const doors10 = new Door();
-// const doors11 = new Door();
-// const doors12 = new Door();
-// const doors13 = new Door();
-// const doors14 = new Door();
+startRoom.linkRoom("right", hallwayOne);
 
-startRoom.linkRoom(doorStart, "open", hallwayOne);
-hallwayOne.linkRoom(doorStart, "open", startRoom);
-hallwayOne.linkRoom(door1, "open", roomOne);
-roomOne.linkRoom(door1, "open", hallwayOne);
+hallwayOne.linkRoom("left", startRoom);
+hallwayOne.linkRoom("up", roomOne);
+roomOne.linkRoom("down", hallwayOne);
+hallwayOne.linkRoom("down", roomTwo);
+roomTwo.linkRoom("up", hallwayOne);
+hallwayOne.linkRoom("right", roomThree);
+roomThree.linkRoom("left", hallwayOne);
+
+roomOne.linkRoom("right", hallwayTwo);
+hallwayTwo.linkRoom("left", roomOne);
+hallwayTwo.linkRoom("up", roomFour);
+
+roomFour.linkRoom("down", hallwayTwo);
+roomFour.linkRoom("up", roomShop);
+roomShop.linkRoom("down", roomFour);
+roomFour.linkRoom("right", hallwayThree);
+
+hallwayThree.linkRoom("left", roomFour);
+hallwayThree.linkRoom("up", roomFive);
+roomFive.linkRoom("down", hallwayThree);
+hallwayThree.linkRoom("down", roomSix);
+roomSix.linkRoom("up", hallwayThree);
+roomFive.linkRoom("right", roomSix);
+roomSix.linkRoom("left", roomFive);
+roomSix.linkRoom("right", hallwayBoss);
+
+hallwayBoss.linkRoom("left", roomSix);
+hallwayBoss.linkRoom("right", roomSeven);
+roomSeven.linkRoom("left", hallwayBoss);
+hallwayBoss.linkRoom("up", bossRoom);
 
 const Dave = new Character("Dave", "Tiefling", "hello there");
 const Bill = new Character("Bill", "fdjusf", "Sup ehrieou");
@@ -244,7 +288,8 @@ startRoom.character = Bill;
 
 const displayRoomInfo = (room) => {
   let occupantMsg = "";
-  let doorsInRoom = "";
+  let weaponInRoom = "";
+  let itemInRoom = "";
   if (room?.character == []) {
     //Somestuff
     occupantMsg = "There is nobody in this room";
@@ -255,17 +300,24 @@ const displayRoomInfo = (room) => {
     }
   }
 
-  for (index in room.doors) {
-    doorsInRoom += `${room.doors[index].description}</br>`; console.log(room.doors[index])
+  if (weapon !== undefined && weapon !== "") {
+    weaponInRoom += `lay in the dusty you can see a ${weapon}</br>`;
+    console.log(weaponInRoom);
+  }
+
+  if (loot !== undefined && loot !== "") {
+    itemInRoom += `${loot} You see a glimmer in the corner of your eye</br>`;
+    console.log(itemInRoom);
   }
 
   let textContent =
     "<p>" +
     room?.describe() +
-    doorsInRoom +
     "</p>" +
     "<p>" +
     occupantMsg +
+    weaponInRoom +
+    itemInRoom +
     "</p>";
 
   document.getElementById("roomname").innerHTML = room?.name;
@@ -410,23 +462,12 @@ let weaponsShattered = [
 ];
 
 let weapon;
-let potion = ["health potion", "useless potion", "mystery potion"];
-let money = [
-  "1 Gold",
-  "2 Gold",
-  "2 Gold",
-  "2 Gold",
-  "1 Gold",
-  "5 Gold",
-  "1 Gold",
-  "1 Gold",
-  "1 Gold",
-  "1 Gold",
-];
-let key = ["Rusty key", "Rusty key"];
+let loot;
 
 weaponGenerator = () => {
   let wepGen = Math.random();
+  let weapon;
+
   if (wepGen < 0.1) {
     weapon = weaponsShining[Math.floor(Math.random() * weaponsShining.length)];
   } else if (wepGen < 0.4) {
@@ -435,10 +476,14 @@ weaponGenerator = () => {
     weapon =
       weaponsShattered[Math.floor(Math.random() * weaponsShattered.length)];
   }
+
+  return weapon; // Return the weapon
 };
-let loot;
+
 lootGenerator = () => {
   let lootGen = Math.random();
+  let loot;
+
   if (lootGen < 0.1) {
     let key = Math.random();
     if (key < 0.3) {
@@ -463,50 +508,73 @@ lootGenerator = () => {
       loot = "1 Gold";
     }
   }
+
+  return loot; // Return loot
 };
 
 const startGame = () => {
+  playerHealth();
+  // this is the starting room.
   currentRoom = startRoom;
-  weaponGenerator();
-  lootGenerator();
-  // console.log(weapon);
-  // console.log(loot);
-  displayRoomInfo(currentRoom);
-
-  currentRoomDoors = [];
-  
-  for (index in currentRoom.doors) {
-    currentRoomDoors.push(currentRoom.doors[index]._name);
-}
-console.log(currentRoomDoors);
-
-
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    // Navigation
-    let commandArray = document.getElementById("userinput").value.split(" ");
-    let commandAction = commandArray[0];
-    let commands = ["open", "use", "fight"];
-    let args = commandArray[1];
-    // console.log
-    
-    if (commandAction === commands[0] && args) {
-      // let matchingDoor = currentRoom.doors.find(doors => doors._name === args);
-      let matchingDoor = currentRoomDoors.find(doors => doors === args);console.log(2134213212);
-      let doorToBeOpened = currentRoom.doors.find(doors => doors._name === args); console.log(doorToBeOpened);
-      if (matchingDoor) {
-        
-        // console.log(matchingDoor.name);
-        currentRoom = currentRoom.move(commandAction, doorToBeOpened);
-        displayRoomInfo(currentRoom);
-      } else {
-        alert("There is no door with that name");
-      }
-    } else {
-      alert("Invalid command");
+  image = currentRoom._background;
+  console.log(image);
+  document.getElementById("gamearea").style.backgroundImage = `url(${image})`;
+  if (currentRoom === startRoom) {
+    weapon = weaponGenerator();
+    let n = Math.random();
+    if (n < 0.2) {
+      loot = lootGenerator();
+    } else if (n < 0.4) {
+      weapon = weaponGenerator();
     }
-  }
-});
-}
 
-startGame()
+    displayRoomInfo(currentRoom);
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      const command = document.getElementById("userinput").value.toLowerCase();
+      const directions = ["left", "right", "up", "down"];
+      let args = command[1];
+
+      if (directions.includes(command)) {
+        currentRoom = currentRoom.move(command);
+        weapon = "";
+        loot = "";
+        let n = Math.random();
+        if (n < 0.2) {
+          weapon = weaponGenerator();
+        } else if (n < 0.6) {
+          loot = lootGenerator();
+        }
+        displayRoomInfo(currentRoom);
+        image = currentRoom._background;
+        console.log(image);
+        document.getElementById(
+          "gamearea"
+        ).style.backgroundImage = `url(${image})`;
+      } else {
+        document.getElementById("userinput").value = "";
+        alert("That is not a valid command.");
+        return;
+      }
+
+      if (loot || weapon) {
+        const commandActions = ["search", "take"];
+        if (commandActions.includes(command)) {
+          //add loot or weapon too player inventory
+          if (args == "weapon") {
+            playerWeapon = weapon.action(command);
+            document.getElementById("item1").innerHTML = `${weapon}`;
+          } else {
+            playerLoot = loot.action(command);
+            document.getElementById("item2").innerHTML = `${loot}`;
+          }
+          document.getElementById("userinput").value = "";
+        }
+      }
+    }
+  });
+};
+
+startGame();

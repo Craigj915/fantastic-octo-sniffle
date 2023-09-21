@@ -16,18 +16,25 @@
     <div class="mx-auto xl:my-20 md:my-10">
       <div class="flex justify-center">
         <div class="flex-none">
-          <div
-            id="playerhp"
-            class="relative right-4 top-20 h-[540px] w-20 border-8 border-green-500 rounded-xl flex justify-center"
-          ></div>
+          <div class="relative right-4 top-20 h-[540px] w-20 
+          border-8 border-green-500 rounded-xl flex justify-center">
+            <div id="playerhp" class="absolute bottom-0 w-full bg-red-500"></div>
+        </div>
         </div>
         <div class="container xl:h-[720px] xl:w-[1280px] md:h-[540px] md:w-[960px] sm:h-[360px] sm:w-[640px]">
 
           <div
             id="gamearea"
             class="h-full w-full relative flex justify-center border-8 border-green-500 rounded-xl bg-center bg-contain bg-no-repeat" 
-            style="background-image: url(Assets/background2.png)";>         
-          
+            >         
+            <div id="playerdied" class="hidden">
+              <video id="playerdiedvid" class="items-center h-full">
+                <source src="Assets/youdied.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div id="playerIcon" class="absolute bottom-28 left-10 h-32 w-32">
+              <img src="Assets/GoblinFemale.png"/>
+            </div>
           <p id="roomname" class="absolute top-0 left-0 px-16 py-8 text-xl"></p>
           <!-- <div class="absolute top-0 right-0 px-4 py-4 text-xl">
             <div id="minimap" class="h-44 w-44 border-8 border-green-500 rounded-xl"></div>

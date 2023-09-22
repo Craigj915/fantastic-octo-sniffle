@@ -15,18 +15,25 @@
   <body class="VT323 bg-black text-white">
     <div class="mx-auto xl:my-20 md:my-10">
       <div class="flex justify-center">
-        <div class="flex-none">
-          <div class="relative right-4 top-20 h-[540px] w-20 
-          border-8 border-green-500 rounded-xl flex justify-center">
-            <div id="playerhp" class="absolute bottom-0 w-full bg-red-500"></div>
-        </div>
-        </div>
         <div class="container xl:h-[720px] xl:w-[1280px] md:h-[540px] md:w-[960px] sm:h-[360px] sm:w-[640px]">
 
           <div
             id="gamearea"
-            class="h-full w-full relative flex justify-center border-8 border-green-500 rounded-xl bg-center bg-contain bg-no-repeat " 
-            >         
+            class="h-full w-full relative flex justify-center border-8 border-green-500 rounded-xl bg-center bg-contain bg-no-repeat " >
+            <p id="roomname" class="absolute top-0 left-0 px-16 py-8 text-xl"></p>
+
+            <div class="flex-none">
+              <div class="absolute -right-28 top-20 h-[540px] w-20 
+              border-8 border-green-500 rounded-xl">
+                <div id="enemyhp" class="absolute bottom-0 w-full bg-red-500"></div>
+            </div>
+            </div>    
+            <div class="flex-none">
+              <div class="absolute -left-28 top-20 h-[540px] w-20 
+              border-8 border-green-500 rounded-xl">
+                <div id="playerhp" class="absolute bottom-0 w-full bg-red-500"></div>
+            </div>
+            </div>    
             <div id="playerdied" class="hidden z-50">
               <video id="playerdiedvid" class="items-center h-full ">
                 <source src="Assets/youdied.mp4" type="video/mp4">
@@ -36,41 +43,18 @@
               <img src="Assets/GoblinFemale.png"/>
             </div>
 
-            <div id="enemy3" class="absolute bottom-28 right-20 h-40 w-40 z-20">
+            <!-- <div id="enemy3" class="absolute bottom-28 right-20 h-40 w-40 z-20">
               <img src="Assets/GoblinMale.png"/>
             </div>
             <div id="enemy2" class="absolute bottom-40 right-28 h-44 w-44">
               <img src="Assets/VampireMale.png"/>
-            </div>            
-            <div id="enemy1" class="absolute bottom-28 right-64 h-48 w-48">
-              <img src="Assets/VampireFemale.png"/>
+            </div>             -->
+            <div id="enemy1" class="hidden absolute bottom-28 right-64 h-48 w-48">
+              <img id="enemy1icon" src=""/>
             </div>
-          <p id="roomname" class="absolute top-0 left-0 px-16 py-8 text-xl"></p>
-          <!-- <div class="absolute top-0 right-0 px-4 py-4 text-xl">
-            <div id="minimap" class="h-44 w-44 border-8 border-green-500 rounded-xl"></div>
-          </div> -->
-          </div>
-          <div class="relative top-2 right-[4px] flex justify-center">
-            <div class="flex-none">
-              <div id="items" class="w-44 text-white">
-                <div id="item1"
-                  class="relative inline-block h-20 w-20 border-8 border-green-500 rounded-xl"
-                ></div>
-                <div id="item2"
-                  class="relative inline-block h-20 w-20 border-8 border-green-500 rounded-xl"
-                ></div>
-                <div id="item3"
-                  class="relative inline-block h-20 w-20 border-8 border-green-500 rounded-xl"
-                ></div>
-                <div id="item4"
-                  class="relative inline-block h-20 w-20 border-8 border-green-500 rounded-xl"
-                ></div>
-              </div>
-            </div>
-
             <div
               id="textbox"
-              class="relative h-[360px] w-[900px] border-8 border-green-500 rounded-xl flex justify-center">
+              class="flex justify-center absolute -bottom-96 h-1/2 w-3/4 border-8 border-green-500 rounded-xl ">
               <p id="textarea" class="absolute mx-4 my-4 text-xl"></p>
               <input id="userinput" type="text" placeholder="Enter Command" 
               class="absolute bottom-20 h-10 w-36 my-4 mx-4 py-4 px-4 bg-black flex justify-center text-center"/></br>
@@ -79,28 +63,31 @@
             <div class="flex-none">
               <div
                 id="commands"
-                class="relative left-2 h-40 w-40 border-8 border-green-500 rounded-xl"
+                class="absolute -bottom-48 -right-4 h-40 w-40 border-8 border-green-500 rounded-xl"
               >
-              <ul class="px-4 text-lg">
-                <li id="command1">one</li>
-                <li id="command2">two</li>
-                <li id="command3">three</li>
-                <li id="command4">four</li>
-                <li id="command5">five</li>
+              <ul class="px-4 text-lg divide-y-8 divide-green-500 text-center">
+                <li id="command1">left, right, up</li>
+                <li id="command2">down, attack</li>
+                <li id="command3">take weapon</li>
+                <li id="command4">take loot</li>
               </ul>
-                <!-- <div class=""></div>
-                <div class=""></div>
-                <div class=""></div>
-                <div class=""></div> -->
+              </div>
+            </div>
+
+            <div class="flex-none">
+              <div
+                id="commands"
+                class="absolute -bottom-48 -left-4 h-40 w-40 border-8 border-green-500  rounded-xl"
+              >
+              <ul class="px-4 text-lg text-center">
+                <li id="item1"></li>
+                <li id="item2"></li>
+                <li id="item3"></li>
+                <li id="item4"></li>
+              </ul>
               </div>
             </div>
           </div>
-        </div>
-        <div class="flex-none">
-          <div
-            id="npchp"
-            class="relative left-4 top-20 h-[540px] w-20 border-8 border-green-500 rounded-md"
-          ></div>
         </div>
       </div>
     </div>

@@ -29,6 +29,10 @@ class Player {
     }
   }
 
+  healHealth(heal) {
+    this._health += heal;
+  }
+
   get weapon() {
     return this._weapon;
   }
@@ -112,13 +116,13 @@ class Room {
 }
 
 class Character {
-  constructor(name, description, conversation, enemyicon, health, weapon) {
+  constructor(name, description, conversation, enemyicon, health, enemydamage) {
     this._name = name;
     this._description = description;
     this._conversation = conversation;
     this._enemyicon = enemyicon;
     this._health = health;
-    this._weapon = weapon;
+    this._enemydamage = enemydamage;
   }
 
   set name(value) {
@@ -190,24 +194,42 @@ class Character {
     }
   }
 
-  get weapon() {
-    return this._weapon;
+  get enemydamage() {
+    return this._enemydamage;
   }
 }
 
 function performAttack() {
-  const playerDamage = calculateDamage(player, currentRoom.character);
-  const enemyDamage = calculateDamage(currentRoom.character, player);
+  if (currentRoom.character.length > 0 && currentRoom.character[0].health > 0) {
+    const playerDamage = calculateWeaponDamage(player._weapon);
+    let enemy;
+    let enemyDamage;
+    for (index in currentRoom.character) {
+      enemy = currentRoom.character[index];
+      enemyDamage = currentRoom.character[index]._enemydamage;
+    }
 
-  currentRoom.character._health -= playerDamage;
-  player.updateHealth(enemyDamage);
+    enemy.health -= playerDamage;
+    player.updateHealth(enemyDamage);
 
-  // if (currentRoom.character._health <= 0) {
-  //   document.getElementById("enemy1").classList.add("hidden");
-  // }
+    if (enemy.health <= 0) {
+      document.getElementById("enemy1").classList.add("hidden");
+    } else {
+      const playerNewHealth = player.health - enemyDamage;
+      if (playerNewHealth <= 0) {
+        document.getElementById("playerdied").classList.remove("hidden");
+        document.getElementById("playerdiedvid").play();
+      } else {
+        player.health = playerNewHealth;
+      }
+    }
 
-  playerHealth();
-  displayRoomInfo(currentRoom);
+    playerHealth();
+    displayRoomInfo(currentRoom);
+  } else {
+    // There is no enemy or the enemy is already defeated
+    alert("There is no enemy in this room.");
+  }
 }
 
 let username;
@@ -217,7 +239,6 @@ let playerWeapon;
 let playerGold;
 let playerPotion;
 let playerKey;
-let enemyWeapon;
 // username, icon, health, weapon, gold, potions, key
 
 let currentEnemy;
@@ -234,17 +255,17 @@ let Enemy = new Character(
   "Enemy",
   "Knight",
   "Who goes there!?!?",
-  "Asset/VampireMale.png",
-  30,
-  enemyWeapon
+  "Assets/VampireMale.png",
+  20,
+  10
 );
 let Boss = new Character(
   "Big-Boss",
   "Hobgoblin",
   "YOU DARE CHALLENGE ME?",
   "Asset/GoblinMale.png",
-  500,
-  enemyWeapon
+  100,
+  45
 );
 
 let Roxy = new Character(
@@ -252,22 +273,24 @@ let Roxy = new Character(
   "Vampire",
   "Hey there~",
   "Asset/VampireFemale.png",
-  150,
-  enemyWeapon
+  40,
+  15
 );
 let Bill = new Character(
   "Bill",
   "",
   "What do you want?",
   "Asset/GoblinMale.png",
-  60,
-  enemyWeapon
+  63,
+  25
 );
 
 playerHealth = () => {
   health = player._health;
 
   if (health == 0) {
+    document.getElementById("playerIcon").classList.add("hidden");
+    document.getElementById("playerDied").classList.remove("hidden");
     document.getElementById("playerdied").classList.remove("hidden");
     document.getElementById("playerdiedvid").play();
   }
@@ -278,32 +301,32 @@ let currentRoom;
 
 const startRoom = new Room(
   "Start Room",
-  "You wake up in a dark room. There is a door to your right",
+  "You wake up in a dark room.</br> There is a door: right",
   "Assets/Background/startRoom.jpg"
 );
 const roomOne = new Room(
   "roomOne",
-  "A large room with 2 doors",
+  "A large room.</br> There is a door: down and right",
   "Assets/Background/Prison.jpg"
 );
 const roomTwo = new Room(
   "roomTwo",
-  "A small cell",
+  "A small cell</br> There is a door: up",
   "Assets/Background/DoorRoomDestroyed.jpg"
 );
 const roomThree = new Room(
   "roomThree",
-  "A large room full of boxes",
+  "A large room full of boxes</br> There is a door: left",
   "Assets/Background/Room4.jpg"
 );
 const roomFour = new Room(
   "roomFour",
-  "A room",
+  "A room </br> There is a door: up and right",
   "Assets/Background/DoorRoom.jpg"
 );
 const roomFive = new Room(
   "roomFive",
-  "A large room with 3 doors",
+  "A large room with 3 doors</br> There is a door: down and right",
   "Assets/Background/Corridor.jpg"
 );
 const roomSix = new Room(
@@ -329,22 +352,22 @@ const bossRoom = new Room(
 
 const hallwayOne = new Room(
   "hallwayOne",
-  "a long dark hallway with 3 doors infront of you",
+  "a long dark hallway with 3 doors infront of you</br> There is a door: up, down and right",
   "Assets/Background/DoorRoom.jpg"
 );
 const hallwayTwo = new Room(
   "hallwayTwo",
-  "A short corridor with 2 doors",
+  "A short corridor</br> There is a door: left and up",
   "Assets/Background/DoorRoom2.jpg"
 );
 const hallwayThree = new Room(
   "hallwayThree",
-  "A short corridor with 2 doors",
+  "A short corridor</br> There is a door: up and down",
   "Assets/Background/hallway.jpg"
 );
 const hallwayBoss = new Room(
   "Boss Corridor",
-  "A short corridor with 2 doors",
+  "A long corridor</br> There is a door: right and a huge door up",
   "Assets/Background/DoorRoom.jpg"
 );
 
@@ -393,15 +416,17 @@ const displayRoomInfo = (room) => {
 
   if (room.character.length > 0 && room.character[0].health > 0) {
     // If there is an enemyalive
-    let enemy = room.character[0];
+    let enemy;
+    for (index in room.character) {
+      enemy = room.character[index];
+    }
     document.getElementById("enemy1").classList.remove("hidden");
     document.getElementById("enemy1icon").src = enemy.enemyicon;
     document.getElementById("enemyhp").classList.add(`h-[${enemy.health}%]`);
   } else {
     document.getElementById("enemy1").classList.add("hidden");
   }
-  
-  console.log(icon);
+
   if (room?.character == []) {
     //Somestuff
     occupantMsg = "There is nobody in this room";
@@ -546,21 +571,40 @@ lootGenerator = () => {
 
   return loot;
 };
-
-function calculateWeaponDamage(weapon) {
-  let weaponType = weapon.split(" ")[0];
-  let wepDmg;
-
-  if (weaponType.includes("Shattered")) {
-    wepDmg = Math.floor(Math.random() * 10) + 10;
-  } else if (weaponType.includes("Sturdy")) {
-    wepDmg = Math.floor(Math.random() * 10) + 20;
+function calculateWeaponDamage() {
+  let playerWeapon = player._weapon;
+  enemy = currentRoom.character[0];
+  let enemyWeapon = enemy._weapon;
+  let playerWepDmg;
+  let enemyWepDmg;
+  if (!enemyWeapon) {
+    if (playerWeapon.includes("Shattered")) {
+      playerWepDmg = Math.floor(Math.random() * 10) + 10;
+    } else if (playerWeapon.includes("Sturdy")) {
+      playerWepDmg = Math.floor(Math.random() * 10) + 20;
+    } else {
+      playerWepDmg = Math.floor(Math.random() * 50) + 50;
+    }
+    console.log(playerWepDmg);
+    return playerWepDmg;
   } else {
-    wepDmg = Math.floor(Math.random() * 50) + 50;
+    if (enemyWeapon.includes("Shattered")) {
+      enemyWepDmg = Math.floor(Math.random() * 10) + 10;
+    } else if (enemyWeapon.includes("Sturdy")) {
+      enemyWepDmg = Math.floor(Math.random() * 10) + 20;
+    } else {
+      enemyWepDmg = Math.floor(Math.random() * 50) + 50;
+    }
+    console.log(enemyWepDmg);
+    return enemyWepDmg;
   }
-
-  return wepDmg;
 }
+
+// if (currentRoom._character.includes("Boss")) {
+//   if (character._health <= 0) {
+//     alert("You have defeated the Boss and Won!!")
+//   }
+// }
 
 const startGame = () => {
   playerHealth();
@@ -584,11 +628,18 @@ const startGame = () => {
       const commandActions = ["take"];
       const attackCommand = ["attack"];
       // ENEMY HERE
-      if (currentRoom.character.length > 0 && currentRoom.character[0].health > 0) {
+      if (
+        currentRoom.character.length > 0 &&
+        currentRoom.character[0].health > 0
+      ) {
         // If there is an enemy alive then commands useable are attack and loot
-        if (!(attackCommand.includes(command) || commandActions.includes(command))) {
+        if (
+          !(attackCommand.includes(command) || commandActions.includes(command))
+        ) {
           // command is not an attack or looting
-          alert("You can only use attack and item commands while there is an enemy.");
+          alert(
+            "You can only use attack and item commands while there is an enemy."
+          );
           document.getElementById("userinput").value = "";
           return;
         }
@@ -631,16 +682,13 @@ const startGame = () => {
         document.getElementById("userinput").value = "";
       } else {
         // fight?
-        pWeapon = player._weapon;
-        console.log("this Damagee");
-        if (!pWeapon) {
+        if (!player._weapon) {
           alert("You have no weapon");
           document.getElementById("userinput").value = "";
         } else if (attackCommand.includes(command)) {
-          let dmg = calculateWeaponDamage(pWeapon);
-          enemyhp = currentRoom.character._health;
-
-          console.log(dmg);
+          // let dmg = calculateWeaponDamage(player._weapon);
+          // enemyhp = currentRoom.character._health;
+          performAttack();
         }
       }
     }

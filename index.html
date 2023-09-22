@@ -20,7 +20,7 @@
           <div
             id="gamearea"
             class="h-full w-full relative flex justify-center border-8 border-green-500 rounded-xl bg-center bg-contain bg-no-repeat " >
-            <p id="roomname" class="absolute top-0 left-0 px-16 py-8 text-xl"></p>
+            <p id="roomname" class="absolute top-0 left-0 px-16 py-8 text-4xl"></p>
 
             <div class="flex-none">
               <div class="absolute -right-28 top-20 h-[540px] w-20 
@@ -39,8 +39,9 @@
                 <source src="Assets/youdied.mp4" type="video/mp4">
               </video>
             </div>
-            <div id="playerIcon" class="absolute bottom-28 left-10 h-32 w-32">
-              <img src="Assets/GoblinFemale.png"/>
+            <div  class="absolute bottom-28 left-20">
+              <img id="playerIcon" class="" src="Assets/Knight.gif"/>
+              <img id="playerDied" class="hidden" src="Assets/KnightDeath.gif"/>
             </div>
 
             <!-- <div id="enemy3" class="absolute bottom-28 right-20 h-40 w-40 z-20">
@@ -55,9 +56,9 @@
             <div
               id="textbox"
               class="flex justify-center absolute -bottom-96 h-1/2 w-3/4 border-8 border-green-500 rounded-xl ">
-              <p id="textarea" class="absolute mx-4 my-4 text-xl"></p>
+              <p id="textarea" class="absolute mx-4 my-4 text-3xl"></p>
               <input id="userinput" type="text" placeholder="Enter Command" 
-              class="absolute bottom-20 h-10 w-36 my-4 mx-4 py-4 px-4 bg-black flex justify-center text-center"/></br>
+              class="absolute bottom-20 h-10 w-40 my-4 mx-4 py-4 px-4 bg-black flex justify-center text-center text-2xl"/></br>
             </div>
 
             <div class="flex-none">
@@ -65,7 +66,7 @@
                 id="commands"
                 class="absolute -bottom-48 -right-4 h-40 w-40 border-8 border-green-500 rounded-xl"
               >
-              <ul class="px-4 text-lg divide-y-8 divide-green-500 text-center">
+              <ul class="px-4 text-lg divide-y-4 divide-green-500 text-center">
                 <li id="command1">left, right, up</li>
                 <li id="command2">down, attack</li>
                 <li id="command3">take weapon</li>

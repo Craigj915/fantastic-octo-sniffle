@@ -23,10 +23,10 @@ class Player {
 
   updateHealth(damage) {
     this._health -= damage;
-    if (this._health <= 0) {
-      document.getElementById("playerdied").classList.remove("hidden");
-      document.getElementById("playerdiedvid").play();
-    }
+    // if (this._health <= 0) {
+    //   document.getElementById("playerdied").classList.remove("hidden");
+    //   document.getElementById("playerdiedvid").play();
+    // }
   }
 
   healHealth(heal) {
@@ -189,9 +189,9 @@ class Character {
 
   updateHealth(damage) {
     this._health -= damage;
-    if (this._health <= 0) {
-      document.getElementById("enemy1").classList.add("hidden");
-    }
+    // if (this._health <= 0) {
+    //   document.getElementById("enemy1").classList.add("hidden");
+    // }
   }
 
   get enemydamage() {
@@ -211,14 +211,26 @@ function performAttack() {
 
     enemy.health -= playerDamage;
     player.updateHealth(enemyDamage);
-
-    if (enemy.health <= 0) {
+    if (enemy == "Boss" && enemy.health <= 0) {
+      alert("You have defeated the Boss and Won!!")
       document.getElementById("enemy1").classList.add("hidden");
+      document.getElementById("enemyhp").classList.add("h-[0]");
+    } else if (enemy.health <= 0) {
+      document.getElementById("enemy1").classList.add("hidden");
+      document.getElementById("enemyhp").classList.add("h-[0]");
     } else {
       const playerNewHealth = player.health - enemyDamage;
       if (playerNewHealth <= 0) {
-        document.getElementById("playerdied").classList.remove("hidden");
-        document.getElementById("playerdiedvid").play();
+        document.getElementById("playerhp").classList.add("h-[0]");          
+        document.getElementById("playerIcon").classList.add("hidden");
+          document.getElementById("playerDied").classList.remove("hidden");
+        let delayInMilliseconds = 3000; //3 second
+        setTimeout(function () {
+          //your code to be executed after 3 second
+          document.getElementById("playerdied").classList.remove("hidden");
+          document.getElementById("playerdiedvid").play();
+
+        }, delayInMilliseconds);
       } else {
         player.health = playerNewHealth;
       }
@@ -263,37 +275,30 @@ let Boss = new Character(
   "Big-Boss",
   "Hobgoblin",
   "YOU DARE CHALLENGE ME?",
-  "Asset/GoblinMale.png",
+  "Assets/GoblinMale.png",
   100,
-  45
+  32
 );
 
 let Roxy = new Character(
   "Roxy",
   "Vampire",
   "Hey there~",
-  "Asset/VampireFemale.png",
+  "Assets/VampireFemale.png",
   40,
-  15
+  50
 );
 let Bill = new Character(
   "Bill",
   "",
   "What do you want?",
-  "Asset/GoblinMale.png",
+  "Assets/GoblinMale.png",
   63,
-  25
+  24
 );
 
 playerHealth = () => {
   health = player._health;
-
-  if (health == 0) {
-    document.getElementById("playerIcon").classList.add("hidden");
-    document.getElementById("playerDied").classList.remove("hidden");
-    document.getElementById("playerdied").classList.remove("hidden");
-    document.getElementById("playerdiedvid").play();
-  }
   document.getElementById("playerhp").classList.add(`h-[${health}%]`);
 };
 
